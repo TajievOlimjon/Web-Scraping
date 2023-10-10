@@ -2,6 +2,8 @@
 using CsvHelper;
 using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
+using System.Text.Json;
+using System;
 
 namespace WebApi
 {
@@ -17,41 +19,42 @@ namespace WebApi
             _fileService = fileService;
         }
         [HttpGet("GetWebSiteData")]
-        public IActionResult GetWebSiteData()
+        public async Task<IActionResult> GetWebSiteData()
         {
             var web = new HtmlWeb();
 
-            var document = web.Load("https://scrapeme.live/shop/");
+            var document = web.Load("https://scrapeme.live/shop/page/2/");
 
             var productHTMLElements = document.DocumentNode.QuerySelectorAll("li.product");
 
             var products = new List<Product>();
-            // iterating over the list of product elements 
             foreach (var productHTMLElement in productHTMLElements)
             {
-                // scraping the interesting data from the current HTML element 
                 var url = HtmlEntity.DeEntitize(productHTMLElement.QuerySelector("a").Attributes["href"].Value);
                 var image = HtmlEntity.DeEntitize(productHTMLElement.QuerySelector("img").Attributes["src"].Value);
                 var name = HtmlEntity.DeEntitize(productHTMLElement.QuerySelector("h2").InnerText);
                 var price = HtmlEntity.DeEntitize(productHTMLElement.QuerySelector(".price").InnerText);
-                // instancing a new product object 
-                var product = new Product{ Url = url, Image = image, Name = name, Price = price };
-                // adding the object containing the scraped data to the list 
+
+                var fileName = await _fileService.DownloadFileAsync(FolderType.Image,image);
+                var product = new Product{ Url = url, Image = fileName, Name = name, Price = price };
                 products.Add(product);
             }
 
-            // initializing the CSV output file 
-            var filePath = Path.Combine(_webHostEnvironment.WebRootPath,FolderType.Other, "products.csv");
-            using (var writer = new StreamWriter(filePath))
-            // initializing the CSV writer 
-            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
-            {
-                // populating the CSV file 
-                csv.WriteRecords(products);
-            }
+            var jsonFileName = "Product.json";
+            await ConvertToJsonFile.ObjectsConvertToJsonFile(products, _webHostEnvironment, jsonFileName, FolderType.Product);
             return Ok();
         }
+        [HttpGet("AllProducts")]
+        public async Task<IActionResult> GetAllProducts()
+        {
+            var jsonFileName = "Product.json";
+            var filePath = Path.Combine(_webHostEnvironment.WebRootPath, FolderType.Product, jsonFileName);
+            using FileStream fileStream = new FileStream(filePath, FileMode.Open);
+            var products = await JsonSerializer.DeserializeAsync<List<Product>>(fileStream);
 
+            return Ok(products);
+        }
     }
+
 }
 

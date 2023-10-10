@@ -6,6 +6,7 @@
         public const string Gif = "Gifs";
         public const string Video = "Videos";
         public const string Other = "Others";
+        public const string Product = "Products";
     }
 }
 
