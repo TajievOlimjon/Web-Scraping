@@ -24,7 +24,7 @@ namespace WebApi
 
             var productHTMLElements = document.DocumentNode.QuerySelectorAll("li.product");
 
-            var products = new List<Product>();
+            var products = new List<ProductDto>();
             foreach (var productHTMLElement in productHTMLElements)
             {
                 var url = HtmlEntity.DeEntitize(productHTMLElement.QuerySelector("a").Attributes["href"].Value);
@@ -33,12 +33,12 @@ namespace WebApi
                 var price = HtmlEntity.DeEntitize(productHTMLElement.QuerySelector(".price").InnerText);
 
                 var fileName = await _fileService.DownloadFileAsync(FolderType.Image,image);
-                var product = new Product{ Url = url, Image = image, Name = name, Price = price };
+                var product = new ProductDto{ Url = url, Image = image, Name = name, Price = price };
                 products.Add(product);
             }
 
             var jsonFileName = "Product.json";
-            await ConvertToJsonFile.ObjectsConvertToJsonFile(products, _webHostEnvironment, jsonFileName, FolderType.Product);
+            await ConvertToJsonFile.ObjectsConvertToJsonFile(products, _webHostEnvironment, jsonFileName, FolderType.JsonObject);
 
             return Ok();
         }
@@ -46,9 +46,9 @@ namespace WebApi
         public async Task<IActionResult> GetAllProducts()
         {
             var jsonFileName = "Product.json";
-            var filePath = Path.Combine(_webHostEnvironment.WebRootPath, FolderType.Product, jsonFileName);
+            var filePath = Path.Combine(_webHostEnvironment.WebRootPath, FolderType.JsonObject, jsonFileName);
             using FileStream fileStream = new FileStream(filePath, FileMode.Open);
-            var products = await JsonSerializer.DeserializeAsync<List<Product>>(fileStream);
+            var products = await JsonSerializer.DeserializeAsync<List<ProductDto>>(fileStream);
 
             return Ok(products);
         }

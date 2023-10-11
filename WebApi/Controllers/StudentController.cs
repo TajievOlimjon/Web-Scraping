@@ -1,12 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
+﻿/*using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
-using System.Reflection;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace WebApi.Controllers
 {
@@ -24,23 +20,23 @@ namespace WebApi.Controllers
         [HttpGet("GetAllStudents_1")]
         public async Task<IActionResult> GetAllStudents()
         {
-            var students = new List<Student>
+            var students = new List<ProductDto>
             {
-                new Student{Id=1,FirstName = "Olimjon",LastName="Tajiev",Age =22},
-                new Student{Id=2,FirstName = "Ali",LastName="Aliev",Age =22},
-                new Student{Id=3,FirstName = "Azam",LastName="Azamov",Age =22},
-                new Student{FirstName = "Anvar",LastName="Nazarzoda",Age =22},
-                new Student{FirstName = "Salah",LastName="Soliev",Age =22}
+                new ProductDto{Id=1,FirstName = "Olimjon",LastName="Tajiev",Age =22},
+                new ProductDto{Id=2,FirstName = "Ali",LastName="Aliev",Age =22},
+                new ProductDto{Id=3,FirstName = "Azam",LastName="Azamov",Age =22},
+                new ProductDto{FirstName = "Anvar",LastName="Nazarzoda",Age =22},
+                new ProductDto{FirstName = "Salah",LastName="Soliev",Age =22}
             };
             var fileName = "Student.json";
-            var filePath = Path.Combine(_webHostEnvironment.WebRootPath, FolderType.Product, fileName);
+            var filePath = Path.Combine(_webHostEnvironment.WebRootPath, FolderType.JsonObject, fileName);
             var options = new JsonSerializerOptions()
             {
                 WriteIndented = true
             };
             var resolver = new CamelCasePropertyNamesContractResolver();
             var settings = new JsonSerializerSettings { ContractResolver = resolver };
-            var newStudents = JsonConvert.DeserializeObject<List<Student>>(filePath);
+            var newStudents = JsonConvert.DeserializeObject<List<ProductDto>>(filePath);
             if(newStudents.Count==0 && students.Count!=0)
             {
                 students = students.Take(1).ToList();
@@ -54,23 +50,23 @@ namespace WebApi.Controllers
                 await System.IO.File.WriteAllTextAsync(filePath, json);
             }
             
-            newStudents = JsonConvert.DeserializeObject<List<Student>>(filePath);
+            newStudents = JsonConvert.DeserializeObject<List<ProductDto>>(filePath);
 
             return Ok(newStudents);
         }
         [HttpGet("GetAllStudents_2")]
         public async Task<IActionResult> GetAllStudents_2()
         {
-            var students = new List<Student>
+            var students = new List<ProductDto>
             {
-                new Student{Id=1,FirstName = "Olimjon",LastName="Tajiev",Age =22},
-                new Student{Id=2,FirstName = "Ali",LastName="Aliev",Age =22},
-                new Student{Id=3,FirstName = "Azam",LastName="Azamov",Age =22},
-                new Student{FirstName = "Anvar",LastName="Nazarzoda",Age =22},
-                new Student{FirstName = "Salah",LastName="Soliev",Age =22}
+                new ProductDto{Id=1,FirstName = "Olimjon",LastName="Tajiev",Age =22},
+                new ProductDto{Id=2,FirstName = "Ali",LastName="Aliev",Age =22},
+                new ProductDto{Id=3,FirstName = "Azam",LastName="Azamov",Age =22},
+                new ProductDto{FirstName = "Anvar",LastName="Nazarzoda",Age =22},
+                new ProductDto{FirstName = "Salah",LastName="Soliev",Age =22}
             };
             var fileName = "Student.json";
-            var filePath = Path.Combine(_webHostEnvironment.WebRootPath, FolderType.Product, fileName);
+            var filePath = Path.Combine(_webHostEnvironment.WebRootPath, FolderType.JsonObject, fileName);
             
             JArray jsonArray = new JArray(filePath);
             foreach (var student in students)
@@ -87,24 +83,24 @@ namespace WebApi.Controllers
         [HttpGet("GetAllStudents_3")]
         public async Task<IActionResult> GetAllStudents_3()
         {
-            var students = new List<Student>
+            var students = new List<ProductDto>
             {
-                new Student{Id=1,FirstName = "Olimjon",LastName="Tajiev",Age =22},
-                new Student{Id=2,FirstName = "Ali",LastName="Aliev",Age =22},
-                new Student{Id=3,FirstName = "Azam",LastName="Azamov",Age =22},
-                new Student{FirstName = "Anvar",LastName="Nazarzoda",Age =22},
-                new Student{FirstName = "Salah",LastName="Soliev",Age =22}
+                new ProductDto{Id=1,FirstName = "Olimjon",LastName="Tajiev",Age =22},
+                new ProductDto{Id=2,FirstName = "Ali",LastName="Aliev",Age =22},
+                new ProductDto{Id=3,FirstName = "Azam",LastName="Azamov",Age =22},
+                new ProductDto{FirstName = "Anvar",LastName="Nazarzoda",Age =22},
+                new ProductDto{FirstName = "Salah",LastName="Soliev",Age =22}
             };
 
             var fileName = "Student.json";
-            var filePath = Path.Combine(_webHostEnvironment.WebRootPath, FolderType.Product, fileName);
+            var filePath = Path.Combine(_webHostEnvironment.WebRootPath, FolderType.JsonObject, fileName);
             using FileStream create = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Read);
             
             if (create.Length>6)
             {
                 await create.DisposeAsync();
                 using FileStream stream = new FileStream(filePath, FileMode.OpenOrCreate);
-                var models = System.Text.Json.JsonSerializer.Deserialize<List<Student>>(stream);
+                var models = System.Text.Json.JsonSerializer.Deserialize<List<ProductDto>>(stream);
                 models.AddRange(students);
                 await stream.DisposeAsync();
 
@@ -126,3 +122,4 @@ namespace WebApi.Controllers
         }
     }
 }
+*/
