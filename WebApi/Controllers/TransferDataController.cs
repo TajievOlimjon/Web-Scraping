@@ -1,9 +1,6 @@
 ﻿using HtmlAgilityPack;
-using CsvHelper;
 using Microsoft.AspNetCore.Mvc;
-using System.Globalization;
 using System.Text.Json;
-using System;
 
 namespace WebApi
 {
@@ -36,12 +33,13 @@ namespace WebApi
                 var price = HtmlEntity.DeEntitize(productHTMLElement.QuerySelector(".price").InnerText);
 
                 var fileName = await _fileService.DownloadFileAsync(FolderType.Image,image);
-                var product = new Product{ Url = url, Image = fileName, Name = name, Price = price };
+                var product = new Product{ Url = url, Image = image, Name = name, Price = price };
                 products.Add(product);
             }
 
             var jsonFileName = "Product.json";
             await ConvertToJsonFile.ObjectsConvertToJsonFile(products, _webHostEnvironment, jsonFileName, FolderType.Product);
+
             return Ok();
         }
         [HttpGet("AllProducts")]
@@ -54,6 +52,7 @@ namespace WebApi
 
             return Ok(products);
         }
+
     }
 
 }

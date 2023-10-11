@@ -1,0 +1,122 @@
+[
+  {
+    "Id": 1,
+    "FirstName": "Olimjon",
+    "LastName": "Tajiev",
+    "Age": 22
+  },
+  {
+    "Id": 2,
+    "FirstName": "Ali",
+    "LastName": "Aliev",
+    "Age": 22
+  },
+  {
+    "Id": 3,
+    "FirstName": "Azam",
+    "LastName": "Azamov",
+    "Age": 22
+  },
+  {
+    "Id": 0,
+    "FirstName": "Anvar",
+    "LastName": "Nazarzoda",
+    "Age": 22
+  },
+  {
+    "Id": 0,
+    "FirstName": "Salah",
+    "LastName": "Soliev",
+    "Age": 22
+  },
+  {
+    "Id": 1,
+    "FirstName": "Olimjon",
+    "LastName": "Tajiev",
+    "Age": 22
+  },
+  {
+    "Id": 2,
+    "FirstName": "Ali",
+    "LastName": "Aliev",
+    "Age": 22
+  },
+  {
+    "Id": 3,
+    "FirstName": "Azam",
+    "LastName": "Azamov",
+    "Age": 22
+  },
+  {
+    "Id": 0,
+    "FirstName": "Anvar",
+    "LastName": "Nazarzoda",
+    "Age": 22
+  },
+  {
+    "Id": 0,
+    "FirstName": "Salah",
+    "LastName": "Soliev",
+    "Age": 22
+  },
+  {
+    "Id": 1,
+    "FirstName": "Olimjon",
+    "LastName": "Tajiev",
+    "Age": 22
+  },
+  {
+    "Id": 2,
+    "FirstName": "Ali",
+    "LastName": "Aliev",
+    "Age": 22
+  },
+  {
+    "Id": 3,
+    "FirstName": "Azam",
+    "LastName": "Azamov",
+    "Age": 22
+  },
+  {
+    "Id": 0,
+    "FirstName": "Anvar",
+    "LastName": "Nazarzoda",
+    "Age": 22
+  },
+  {
+    "Id": 0,
+    "FirstName": "Salah",
+    "LastName": "Soliev",
+    "Age": 22
+  },
+  {
+    "Id": 1,
+    "FirstName": "Olimjon",
+    "LastName": "Tajiev",
+    "Age": 22
+  },
+  {
+    "Id": 2,
+    "FirstName": "Ali",
+    "LastName": "Aliev",
+    "Age": 22
+  },
+  {
+    "Id": 3,
+    "FirstName": "Azam",
+    "LastName": "Azamov",
+    "Age": 22
+  },
+  {
+    "Id": 0,
+    "FirstName": "Anvar",
+    "LastName": "Nazarzoda",
+    "Age": 22
+  },
+  {
+    "Id": 0,
+    "FirstName": "Salah",
+    "LastName": "Soliev",
+    "Age": 22
+  }
+]
