@@ -6,9 +6,12 @@
         public string Name { get; set; } = null!;
         public string FileName { get; set; } = null!;
         public int CategoryId { get; set; }
-        public List<ProductAbout>? ProductAbouts { get; set; } = null;
+        public List<Attribute> Attributes { get; set; } = new();
     }
 }
+
+
+
 
 
 
