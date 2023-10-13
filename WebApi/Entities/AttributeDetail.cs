@@ -1,13 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApi
 {
     public class AttributeDetail
     {
         public int Id { get; set; }
-        [DataType("jsonb")]
-        public ProductAttributeDetailName ProductAttributeDetailName { get; set; } = new();
+        public string? Name { get; set; } = null;
         public int AttributeId { get; set; }
+        public virtual Attribute Attribute { get; set; } = null!;
+        public virtual ICollection<ProductAttributeDetail>? ProductAttributeDetails { get; set; }
     }
     public class ProductAttributeDetailName
     {
@@ -15,6 +16,8 @@ namespace WebApi
         public string? NameValue { get; set; } = null;
     }
 }
+
+
 
 
 
