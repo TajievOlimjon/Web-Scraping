@@ -30,6 +30,14 @@ namespace WebApi
                 await createStream.DisposeAsync();
             }
         }
+        public static async Task UpdateJsonFile<T>(this List<T> models, IWebHostEnvironment _webHostEnvironment, string fileName, string folderName)
+        {
+            var filePath = Path.Combine(_webHostEnvironment.WebRootPath, folderName, fileName);
+            var jsonSerializerOptions = new JsonSerializerOptions() { WriteIndented = true };
+            using FileStream createStream = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Write);
+            await JsonSerializer.SerializeAsync(createStream, models, jsonSerializerOptions);
+            await createStream.DisposeAsync();
+        }
         public static async Task ObjectConvertToJsonFile<T>(this T model, IWebHostEnvironment _webHostEnvironment, string fileName, string folderName)
         {
             var filePath = Path.Combine(_webHostEnvironment.WebRootPath, folderName, fileName);
@@ -42,4 +50,5 @@ namespace WebApi
         }
     }
 }
+
 

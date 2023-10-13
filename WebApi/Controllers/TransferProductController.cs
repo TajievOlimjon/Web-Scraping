@@ -36,12 +36,15 @@ namespace WebApi
                 HtmlDocument document;
                 var urlAddressJsonFileName = "UrlAddress.json";
                 var allUrlAddresses = await ConvertToObject.JsonFileConvertToObjects<UrlAddress>(_webHostEnvironment, urlAddressJsonFileName, FolderType.JsonObject);
+                var updateUrlAddresses = new List<UrlAddress>();
                 foreach (var urlAddress in allUrlAddresses)
                 {
+                    if (urlAddress.VisitedAddress == true) continue;
                     document = web.Load(urlAddress.Url);
+                    urlAddress.VisitedAddress = true;
+                    updateUrlAddresses.Add(urlAddress);
 
                     var headersElements = document.DocumentNode.QuerySelectorAll("ul.c-breadcrumbs").SelectMany(x => x.ChildNodes).ToList();
-                    //var categoryName = HtmlEntity.DeEntitize(document.DocumentNode.QuerySelectorAll("ul.c-breadcrumbs").Skip(2).FirstOrDefault()?.InnerText.TrimStart().TrimEnd());
                     var categoryName = headersElements.Skip(2).FirstOrDefault()?.InnerText.TrimStart().TrimEnd();
 
                     var productHTMLElement = document.DocumentNode.QuerySelector("div.v-card");
@@ -99,7 +102,7 @@ namespace WebApi
                             {
                                 Id = ++newAttributeDetailId,
                                 AttributeId = newAttribute.Id,
-                                ProductAttributeDetail = new ProductAttributeDetail
+                                ProductAttributeDetailName = new ProductAttributeDetailName
                                 {
                                     Name = productAttributeDetailName,
                                     NameValue = Regex.Replace(productAttributeDetailValue.Trim(), @"\s", "")
@@ -119,6 +122,12 @@ namespace WebApi
                     await ConvertToJsonFile.ObjectsConvertToJsonFile(products, _webHostEnvironment, productJsonFileName, FolderType.JsonObject);
                     //var fileName = await _fileService.DownloadFileAsync(FolderType.Image, image);
                 }
+
+                if (updateUrlAddresses.Count != 0)
+                {
+                    await ConvertToJsonFile.UpdateJsonFile(updateUrlAddresses, _webHostEnvironment, urlAddressJsonFileName, FolderType.JsonObject);
+                }
+
                 return StatusCode(200, "Success");
             }
             catch (Exception ex)
@@ -154,6 +163,7 @@ namespace WebApi
                 return StatusCode(500, ex.Message);
             }
         }
+        [HttpPost("AddUrlAddresses")]
         public async Task<IActionResult> AddUrlAddress(string urlAddress)
         {
             try
@@ -164,10 +174,19 @@ namespace WebApi
                 var address = allUrlAddresses.FirstOrDefault(x => x.Url == urlAddress.TrimStart().TrimEnd());
                 if (address == null)
                 {
-                    var newUrlAddresses = new List<UrlAddress> { new UrlAddress { Url = urlAddress.TrimStart().TrimEnd() } };
+                    var newUrlAddresses = new List<UrlAddress>
+                    { 
+                        new UrlAddress 
+                        {
+                            Url = urlAddress.TrimStart().TrimEnd(),
+                            VisitedAddress = false
+                        } 
+                    };
                     await ConvertToJsonFile.ObjectsConvertToJsonFile(newUrlAddresses, _webHostEnvironment, urlAddressJsonFileName, FolderType.JsonObject);
+
+                    return StatusCode(200, "Successfully added");
                 }
-                return StatusCode(500, "Successfully added");
+                return StatusCode(403, "Url address already exists !");
             }
             catch (Exception ex)
             {
