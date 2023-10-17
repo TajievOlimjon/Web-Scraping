@@ -10,11 +10,6 @@ namespace WebApi
         public virtual Attribute Attribute { get; set; } = null!;
         public virtual ICollection<ProductAttributeDetail>? ProductAttributeDetails { get; set; }
     }
-    public class ProductAttributeDetailName
-    {
-        public string? Name { get; set; } = null;
-        public string? NameValue { get; set; } = null;
-    }
 }
 
 

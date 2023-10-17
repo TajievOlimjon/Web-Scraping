@@ -35,7 +35,7 @@ namespace WebApi.Controllers
                                                {
                                                    Id = product.Id,
                                                    Name = product.Name,
-                                                   FileName = product.FileName,
+                                                   //FileName = product.FileName,
                                                    CategoryId = product.CategoryId,
                                                    AllAttributes = (from a in _dbContext.AttributeDetails
                                                                      join d in _dbContext.AttributeDetails on a.Id equals d.AttributeId
@@ -54,7 +54,7 @@ namespace WebApi.Controllers
                                                                          {
                                                                              Id = d.Id,
                                                                              Name = d.Name,
-                                                                             NameValue = d.ProductAttributeDetails.FirstOrDefault(x => x.ProductId == product.Id).ProductAttributeDetailName
+                                                                             NameValue = d.ProductAttributeDetails.FirstOrDefault(x => x.ProductId == product.Id).Value
                                                                          }).ToList()
                                                                      }).ToList()
                                                }).ToList()
