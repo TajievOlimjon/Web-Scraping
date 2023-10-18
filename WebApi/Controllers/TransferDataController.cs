@@ -1,4 +1,4 @@
-﻿using HtmlAgilityPack;
+﻿/*using HtmlAgilityPack;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
@@ -52,7 +52,7 @@ namespace WebApi
 
             return Ok(products);
         }
-        /*[HttpGet("Start-transfer-products-from-website-to-json")]*/
+        *//*[HttpGet("Start-transfer-products-from-website-to-json")]*/
         /* public async Task<IActionResult> StartTransfer()
          {
              try
@@ -170,8 +170,9 @@ namespace WebApi
              {
                  return StatusCode(500, ex.Message);
              }
-         }*/
+         }*//*
     }
 
 }
 
+*/
