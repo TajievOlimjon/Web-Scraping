@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using System.Reflection.Metadata;
 using System.Text.RegularExpressions;
 using WebApi.Entities;
-using WebApi.JsonHalpers;
 
 namespace WebApi
 {
@@ -165,102 +164,10 @@ namespace WebApi
             }
 
         }
-        [HttpPost("AddPageUrlAddresses")]
-        public async Task<IActionResult> AddPageUrlAddresses(string pageUrlAddress)
-        {
-            try
-            {
-                var pageAddress = _dbContext.PageUrlAddresses.FirstOrDefault(x => x.PageUrl == pageUrlAddress.TrimStart().TrimEnd());
-                if (pageAddress == null)
-                {
-                    var newPageUrlAddress = new PageUrlAddress
-                    {
-                        PageUrl = pageUrlAddress.TrimStart().TrimEnd(),
-                        VisitedAddress = false
-                    };
-                    await _dbContext.PageUrlAddresses.AddAsync(newPageUrlAddress);
-                    await _dbContext.SaveChangesAsync();
-
-                    return StatusCode(200, "Successfully added");
-                }
-                return StatusCode(403, "PageUrl address already exists !");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
-        private async Task UpdateUrlAddress(List<UrlAddress> urlAddresses)
-        {
-            try
-            {
-                foreach (var urlAddress in urlAddresses)
-                {
-                    var url = await _dbContext.UrlAddresses.FirstOrDefaultAsync(x=>x.Id==urlAddress.Id);
-                    if (url != null)
-                    {
-                        url.VisitedAddress = true;
-                        await _dbContext.SaveChangesAsync();
-                    }
-                    //_dbContext.UpdateRange(urlAddresses);
-                }
-            }
-            catch (Exception ex)
-            {
-                await Console.Out.WriteLineAsync(ex.Message);
-            }
-        }
-        [HttpGet("TransferUrlAddress")]
-        public async Task<IActionResult> TransferUrlAddress()
-        {
-            try
-            {
-                var pageUrlAddresses = await _dbContext.PageUrlAddresses.Where(x=>x.VisitedAddress==false).ToListAsync();
-                foreach (var page in pageUrlAddresses)
-                {
-                    var pageAddress = await _dbContext.PageUrlAddresses.FirstOrDefaultAsync(x=>x.PageUrl==page.PageUrl);
-                    if (pageAddress == null) continue;
-                    
-                    pageAddress.VisitedAddress = true;
-                    await _dbContext.SaveChangesAsync();
-
-                    var web = new HtmlWeb();
-                    HtmlDocument document = web.Load(pageAddress.PageUrl);
-
-                    var htmlUrlAddressElements = document.DocumentNode.QuerySelectorAll("li.c-grid-item").SelectMany(x => x.ChildNodes).ToList();
-
-                    foreach (var html in htmlUrlAddressElements)
-                    {
-
-                        var urlAddress = html.QuerySelector("a.picture").Attributes["href"].Value;
-
-                        //var urlAddress = HtmlEntity.DeEntitize(html.QuerySelector("h1.title").InnerText.TrimStart().TrimEnd());
-
-                        var url = await _dbContext.UrlAddresses.FirstOrDefaultAsync(x=>x.Url==urlAddress);
-                        if (url == null)
-                        {
-                            var newUrlAddress = new UrlAddress
-                            {
-                                Url = "https://shantui.com.ru"+urlAddress,
-                                VisitedAddress = false
-                            };
-
-                            await _dbContext.UrlAddresses.AddAsync(newUrlAddress);
-                            await _dbContext.SaveChangesAsync();
-                        }
-                    }
-                }
-                return StatusCode(200, "Success");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
         [HttpGet("Download-Additional-Product-Images")]
         public async Task<IActionResult> DownloadProductImages()
         {
-            var imagesURLs = await _dbContext.ProductImages.Where(x=>x.FileName.StartsWith("https://")).AsNoTracking().ToListAsync();
+            var imagesURLs = await _dbContext.ProductImages.AsNoTracking().ToListAsync();
             foreach (var imageUrl in imagesURLs)
             {
                var fileName = await _fileService.DownloadFileAsync(FolderType.Image,imageUrl.FileName);
@@ -272,20 +179,5 @@ namespace WebApi
 
             return Ok("Success");
         }
-       /* [HttpGet("Download-Product-Image")]
-        public async Task<IActionResult> DownloadProductImage()
-        {
-            var imagesURLs = await _dbContext.Products.AsNoTracking().ToListAsync();
-            foreach (var imageUrl in imagesURLs)
-            {
-                var fileName = await _fileService.DownloadFileAsync(FolderType.Image, imageUrl.FileName);
-
-                 imageUrl.FileName = fileName;
-                _dbContext.Update(imageUrl);
-                await _dbContext.SaveChangesAsync();
-            }
-
-            return Ok("Success");
-        }*/
     }
 }
